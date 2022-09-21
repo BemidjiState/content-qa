@@ -1,0 +1,26 @@
+{
+	"folders":
+	[
+		{
+			"folder_exclude_patterns": [
+				".git"
+			],
+			"path": ".",
+		},
+	],
+	"settings":
+	{
+		"default_line_ending": "unix",
+		"end_of_line": "lf",
+		"ensure_newline_at_eof_on_save": true,
+		"indent_style": "tab",
+		"SublimeLinter.linters.phpcs.args": [
+			"--standard=WordPress",
+			"-s",
+		],
+		"SublimeLinter.linters.phpcs.disable": false,
+		"tab_size": 4,
+		"trim_trailing_white_space": true,
+		"trim_trailing_white_space_on_save": true,
+	},
+}
