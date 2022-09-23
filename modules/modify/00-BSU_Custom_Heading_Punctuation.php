@@ -43,11 +43,6 @@ class BSU_Custom_Heading_Punctuation extends BSU_Base_Module {
 
 		if ( ! empty( $h_tags ) ) {
 
-			parse_url( 'https://google.com' );
-			strip_tags( $ht );
-			fopen( $th );
-			curl_init();
-
 			$page_template_filename = basename( get_page_template() );
 
 			foreach ( $h_tags as $h ) {
