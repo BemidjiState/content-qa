@@ -9,7 +9,7 @@
  * Right now this is just included with the theme. Track this separately once there is a need for it
  * outside of the theme.
  *
- * @package bsu2021
+ * @package content-qa
  * @since 1.0.0
  */
 
@@ -17,21 +17,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-/**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
- */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
-
-
-
-
-
-
 
 /**
  * Validates HTML content for ADA compliance and some HTML validation.
@@ -167,7 +152,6 @@ class BSU_Content_Validator {
 		$this->headings_start = $this->get_headings_start( $args );
 		$this->headings_end   = $this->get_headings_end( $args );
 
-
 		// Load the HTML and create a DOMDocument object.
 		$html_encoded = $this->encode_html( $html );
 
@@ -264,7 +248,6 @@ class BSU_Content_Validator {
 	 * @since 1.0.0
 	 *
 	 * @param string $module_name The class of the submodule being called.
-	 * @param string $dir_path A custom directory path to PHP files used as modules.
 	 */
 	private function module_auto_loader( string $module_name ) {
 
@@ -400,7 +383,6 @@ class BSU_Content_Validator {
 			} else {
 				$headings_start = (int) $args['headings_start'];
 			}
-
 		} else {
 
 			// Starting at H2 since in most cases the H1 is already set programatically.
@@ -439,7 +421,6 @@ class BSU_Content_Validator {
 			} else {
 				$headings_end = (int) $args['headings_end'];
 			}
-
 		} else {
 
 			$headings_end = 6;

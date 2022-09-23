@@ -3,7 +3,9 @@
  * The base class to be extended for creating new modules. These classes should be used within a
  * BSU_Content_Validator class. They can be autoloaded as they are used by the class.
  *
- * @package bsu2021
+ * @uses DOMDocument
+ *
+ * @package content-qa
  * @since 1.0.0
  */
 
@@ -11,21 +13,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-/**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
- */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
-
-
-
-
-
-
 
 /**
  * Validates HTML content for ADA compliance and some HTML validation.
@@ -74,8 +61,8 @@ class BSU_Base_Module {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object $dom A DOMDocument object that will be inspected.
-	 * @param array  $args The args to use within the class.
+	 * @param DOMDocument $dom A DOMDocument object that will be inspected.
+	 * @param array       $args The args to use within the class.
 	 */
 	public function __construct( DOMDocument $dom, $args ) {
 

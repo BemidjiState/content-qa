@@ -1,34 +1,15 @@
-<?php
-/**
- * Checks raw HTML for common problems or misuse in HTML. This function is meant to be usable
- * outside of WordPress so only builtin PHP functions are used.
- *
- * @package bsu2021
- * @since 1.0.0
- */
+<?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
 
-/* Exit if accessed directly. */
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
- */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
-
-
-
-/**
  * Validates HTML content to ensure consistancy in the BSU site. This is not ADA. It is specifically
  * to validate content is entered as expected on our sites.
  *
- * @uses DOMDocument
- *
+ * @package content-qa
  * @since 1.0.0
  */
 class BSU_Custom_P_Limit extends BSU_Base_Module {
@@ -100,9 +81,6 @@ class BSU_Custom_P_Limit extends BSU_Base_Module {
 				"There ${count_text} found in the content. Only ${limit_text} allowed.",
 				3,
 			);
-
-// var_dump( $this->errors );
-// var_dump( $limit, $limit_text, $p_tags->length, $count_text );die;
 		}
 	}
 }
