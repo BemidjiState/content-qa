@@ -1,25 +1,16 @@
-<?php
-/**
- * Validation of links (<A> tags).
- *
- * @package bsu2021
- * @since 1.0.0
- */
+<?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
 
-/* Exit if accessed directly. */
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
+ * Validation of text within A tags. Checks for bad practice.
+ *
+ * @package content-qa
+ * @since 1.0.0
  */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
-
 class BSU_Links_Text extends BSU_Base_Module {
 
 
@@ -29,10 +20,12 @@ class BSU_Links_Text extends BSU_Base_Module {
 
 
 	/**
-	 * The constructor for this class.
+	 * Validates the input HTML and sets an array of errors within the object.
 	 *
-	 * @param DOMDocument $dom The DOMDocument object to inspect.
-	 * @param array       $args Args that may be passed to the class.
+	 * @since 1.0.0
+	 *
+	 * @param DOMDocument $dom A DOMDocument object.
+	 * @param array       $args High level args passed to the class.
 	 */
 	public function __construct( DOMDocument $dom, $args ) {
 

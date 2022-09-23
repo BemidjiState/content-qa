@@ -1,15 +1,36 @@
-<?php
-/**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
- */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
+<?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Checks for valid heading structure and tries to identify misuse of headings.
+ *
+ * @package content-qa
+ * @since 1.0.0
+ */
 class BSU_Heading_Structure extends BSU_Base_Module {
 
+
+
+
+
+
+
+	/**
+	 * Validates the input HTML and sets an array of errors within the object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param DOMDocument $dom The HTML to validate.
+	 * @param array       $args High level args passed to the class.
+	 *     $args = [
+	 *         'headings_start' => (int) The first number accepted for heading depth (e.g. 2 for an H2).
+	 *         'headings_end'   => (int) The last number accepted for heading depth (e.g. 6 for an H6).
+	 *     ].
+	 */
 	public function __construct( DOMDocument $dom, $args ) {
 
 		parent::__construct( $dom, $args );
@@ -71,7 +92,6 @@ class BSU_Heading_Structure extends BSU_Base_Module {
 						3
 					);
 				}
-
 			} else {
 
 				/**
@@ -129,7 +149,6 @@ class BSU_Heading_Structure extends BSU_Base_Module {
 					if ( ! empty( trim( $sibling->nodeValue ) ) ) {
 						$valid_section_content_found = true;
 					}
-
 				} elseif ( empty( $sibling ) ) {
 
 					/**

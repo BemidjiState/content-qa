@@ -1,34 +1,15 @@
-<?php
-/**
- * Checks raw HTML for common problems or misuse in HTML. This function is meant to be usable
- * outside of WordPress so only builtin PHP functions are used.
- *
- * @package bsu2021
- * @since 1.0.0
- */
+<?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
 
-/* Exit if accessed directly. */
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
- */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
-
-
-
-/**
- * Validates HTML content to ensure consistancy in the BSU site. This is not ADA. It is specifically
- * to validate content is entered as expected on our sites.
+ * A custom BSU rule for consistancy in content. This is not ADA. It is specifically to validate
+ * content is entered as expected.
  *
- * @uses DOMDocument
- *
+ * @package content-qa
  * @since 1.0.0
  */
 class BSU_Custom_P_Limit extends BSU_Base_Module {
@@ -47,10 +28,7 @@ class BSU_Custom_P_Limit extends BSU_Base_Module {
 	 * @param DOMDocument $dom A DOMDocument object.
 	 * @param array       $args High level args passed to the class.
 	 *     $args = [
-	 *         'headings_start' => (int) The first number accepted for heading depth (e.g. 2 for an H2).
-	 *         'headings_end'   => (int) The last number accepted for heading depth (e.g. 6 for an H6).
-	 *         'word_limit'     => (int) The word limit to check against.
-	 *         'par_limit'      => (int) The paragraph limit to check against.
+	 *         'par_limit' => (int) The paragraph limit to check against.
 	 *     ].
 	 */
 	public function __construct( DOMDocument $dom, $args ) {
@@ -58,8 +36,8 @@ class BSU_Custom_P_Limit extends BSU_Base_Module {
 		parent::__construct( $dom, $args );
 
 		if ( $args['par_limit'] > 0 ) {
-			$this->limit = intval( $args['par_limit'] );
 
+			$this->limit = intval( $args['par_limit'] );
 			$this->check_p_tags_count( intval( $args['par_limit'] ) );
 
 		}
@@ -100,9 +78,6 @@ class BSU_Custom_P_Limit extends BSU_Base_Module {
 				"There ${count_text} found in the content. Only ${limit_text} allowed.",
 				3,
 			);
-
-// var_dump( $this->errors );
-// var_dump( $limit, $limit_text, $p_tags->length, $count_text );die;
 		}
 	}
 }

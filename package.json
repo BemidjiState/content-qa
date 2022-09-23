@@ -1,5 +1,10 @@
 {
-    "name": "content-qa",
-    "version": "1.0.0",
-    "author": "BSU Web Services"
+	"name": "content-qa",
+	"version": "1.0.0",
+	"author": "BSU Web Services",
+	"description": "Validates and modifies content based on configurable rules/modules.",
+	"repository": {
+		"type": "git",
+		"url": "https://bitbucket.bemidjistate.edu/projects/INC/repos/content-qa/browse"
+	}
 }
