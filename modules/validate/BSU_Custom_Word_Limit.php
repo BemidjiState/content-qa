@@ -27,8 +27,7 @@ class BSU_Custom_Word_Limit extends BSU_Base_Module {
 	 * @param DOMDocument $dom A DOMDocument object.
 	 * @param array       $args High level args passed to the class.
 	 *     $args = [
-	 *         'word_limit'     => (int) The word limit to check against.
-	 *         'par_limit'      => (int) The paragraph limit to check against.
+	 *         'word_limit' => (int) The word limit to check against.
 	 *     ].
 	 */
 	public function __construct( DOMDocument $dom, $args ) {
