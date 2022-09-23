@@ -1,7 +1,7 @@
 <?php
 /**
  * The base class to be extended for creating new modules. These classes should be used within a
- * BSU_Content_Validator class. They can be autoloaded as they are used by the class.
+ * BSU_Content_QA class. They can be autoloaded as they are used by the class.
  *
  * @uses DOMDocument
  *
@@ -63,6 +63,12 @@ class BSU_Base_Module {
 	 *
 	 * @param DOMDocument $dom A DOMDocument object that will be inspected.
 	 * @param array       $args The args to use within the class.
+	 *     $args = [
+	 *         'headings_start' => (string) The fir
+	 *         'headings_end'   => (string)
+	 *         'par_limit'      => (int) The paragraph count limit to check against.
+	 *         'word_limit'     => (int) The word count limit to check against.
+	 *     ].
 	 */
 	public function __construct( DOMDocument $dom, $args ) {
 

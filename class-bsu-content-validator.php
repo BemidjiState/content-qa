@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class BSU_Content_Validator {
+class BSU_Content_QA {
 
 	/**
 	 * The type of modules to be run. Can be validation, modification, or all.
@@ -127,7 +127,7 @@ class BSU_Content_Validator {
 	 *         'headings_end'     => (int) The last number accepted for heading depth (e.g. 6 for an H6).
 	 *         'par_limit'        => (int) The maximum allowed paragraphs when checking paragraph count.
 	 *         'word_limit'       => (int) The maximum allowed words when checking word count.
-	 *         'modules_disabled' => (array) Modules to ignore.
+	 *         'modules_disabled' => (array) Modules/class names to ignore.
 	 *         'modules'          => [ (array) The names and paths of modules to be used within the class.
 	 *             'modify'   => (array) Modules that modify content.
 	 *                 'Module_Class_Name' (string) The class name of modules to be used.
@@ -379,7 +379,7 @@ class BSU_Content_Validator {
 		if ( array_key_exists( 'headings_start', $args ) ) {
 
 			if ( $args['headings_start'] < 1 || $args['headings_start'] > 6 ) {
-				throw new Exception( 'An invalid value was provided for $args[headings_start].' );
+				throw new Exception( 'An int between 1 and 6 was expected for $args[headings_start].' );
 			} else {
 				$headings_start = (int) $args['headings_start'];
 			}
@@ -415,7 +415,7 @@ class BSU_Content_Validator {
 		if ( array_key_exists( 'headings_end', $args ) ) {
 
 			if ( $args['headings_end'] < 1 || $args['headings_end'] > 6 ) {
-				throw new Exception( 'An invalid value was provided for $args[headings_end].' );
+				throw new Exception( 'An int between 1 and 6 was expected for $args[headings_end].' );
 			} elseif ( $args['headings_end'] < $args['headings_start'] ) {
 				throw new Exception( '$args[headings_end] cannot be less than $args[heading_start]' );
 			} else {
