@@ -1,15 +1,30 @@
-<?php
-/**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
- */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
+<?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Remove attributes from headings.
+ *
+ * @package content-qa
+ * @since 1.0.0
+ */
 class BSU_Heading_Attributes extends BSU_Base_Module {
 
+
+
+
+
+
+
+	/**
+	 * The constructor for this class.
+	 *
+	 * @param DOMDocument $dom The DOMDocument object to inspect.
+	 * @param array       $args Args that may be passed to the class.
+	 */
 	public function __construct( DOMDocument $dom, $args ) {
 
 		parent::__construct( $dom, $args );

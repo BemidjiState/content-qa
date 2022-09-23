@@ -1,25 +1,16 @@
-<?php
-/**
- * Validation of links (<A> tags).
- *
- * @package bsu2021
- * @since 1.0.0
- */
+<?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
 
-/* Exit if accessed directly. */
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
+ * Validation of links (<A> tags).
+ *
+ * @package content-qa
+ * @since 1.0.0
  */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
-
 class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 

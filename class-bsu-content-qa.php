@@ -9,7 +9,7 @@
  * Right now this is just included with the theme. Track this separately once there is a need for it
  * outside of the theme.
  *
- * @package bsu2021
+ * @package content-qa
  * @since 1.0.0
  */
 
@@ -19,28 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
- */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
-
-
-
-
-
-
-
-/**
  * Validates HTML content for ADA compliance and some HTML validation.
  *
  * @uses DOMDocument
  *
  * @since 1.0.0
  */
-class BSU_Content_Validator {
+class BSU_Content_QA {
 
 	/**
 	 * The type of modules to be run. Can be validation, modification, or all.
@@ -142,7 +127,7 @@ class BSU_Content_Validator {
 	 *         'headings_end'     => (int) The last number accepted for heading depth (e.g. 6 for an H6).
 	 *         'par_limit'        => (int) The maximum allowed paragraphs when checking paragraph count.
 	 *         'word_limit'       => (int) The maximum allowed words when checking word count.
-	 *         'modules_disabled' => (array) Modules to ignore.
+	 *         'modules_disabled' => (array) Modules/class names to ignore.
 	 *         'modules'          => [ (array) The names and paths of modules to be used within the class.
 	 *             'modify'   => (array) Modules that modify content.
 	 *                 'Module_Class_Name' (string) The class name of modules to be used.
@@ -166,7 +151,6 @@ class BSU_Content_Validator {
 		// Set default args and validate any passed args.
 		$this->headings_start = $this->get_headings_start( $args );
 		$this->headings_end   = $this->get_headings_end( $args );
-
 
 		// Load the HTML and create a DOMDocument object.
 		$html_encoded = $this->encode_html( $html );
@@ -264,7 +248,6 @@ class BSU_Content_Validator {
 	 * @since 1.0.0
 	 *
 	 * @param string $module_name The class of the submodule being called.
-	 * @param string $dir_path A custom directory path to PHP files used as modules.
 	 */
 	private function module_auto_loader( string $module_name ) {
 
@@ -396,11 +379,10 @@ class BSU_Content_Validator {
 		if ( array_key_exists( 'headings_start', $args ) ) {
 
 			if ( $args['headings_start'] < 1 || $args['headings_start'] > 6 ) {
-				throw new Exception( 'An invalid value was provided for $args[headings_start].' );
+				throw new Exception( 'An int between 1 and 6 was expected for $args[headings_start].' );
 			} else {
 				$headings_start = (int) $args['headings_start'];
 			}
-
 		} else {
 
 			// Starting at H2 since in most cases the H1 is already set programatically.
@@ -433,13 +415,12 @@ class BSU_Content_Validator {
 		if ( array_key_exists( 'headings_end', $args ) ) {
 
 			if ( $args['headings_end'] < 1 || $args['headings_end'] > 6 ) {
-				throw new Exception( 'An invalid value was provided for $args[headings_end].' );
+				throw new Exception( 'An int between 1 and 6 was expected for $args[headings_end].' );
 			} elseif ( $args['headings_end'] < $args['headings_start'] ) {
 				throw new Exception( '$args[headings_end] cannot be less than $args[heading_start]' );
 			} else {
 				$headings_end = (int) $args['headings_end'];
 			}
-
 		} else {
 
 			$headings_end = 6;

@@ -1,13 +1,16 @@
-<?php
-/**
- * Linting standards for WordPress are used here but we are expecting to not have WordPress
- * available. So here are some linter exclusions.
- */
-// phpcs:disable WordPress.WP.AlternativeFunctions
-// phpcs:disable WordPress.WP.GlobalVariablesOverride
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-// phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd
+<?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * A custom BSU ruleset that removes punctuation from most headings.
+ *
+ * @package content-qa
+ * @since 1.0.0
+ */
 class BSU_Custom_Heading_Punctuation extends BSU_Base_Module {
 
 
@@ -39,6 +42,11 @@ class BSU_Custom_Heading_Punctuation extends BSU_Base_Module {
 		$h_tags = $xpath->query( $headings_xpath_query );
 
 		if ( ! empty( $h_tags ) ) {
+
+			parse_url( 'https://google.com' );
+			strip_tags( $ht );
+			fopen( $th );
+			curl_init();
 
 			$page_template_filename = basename( get_page_template() );
 
