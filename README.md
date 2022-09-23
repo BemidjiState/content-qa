@@ -14,7 +14,7 @@ Add this git repo to you project's `package.json` for NPM or add it as a Git sub
 Then be sure the `content-qa` directory is moved to a location within your project where it can be included or required with PHP, like in the example below.
 
 ```php
-require_once 'DIR/IN/YOUR/PROJECT/content-qa/class-bsu-conten-qa.php';
+require_once 'DIR/IN/YOUR/PROJECT/content-qa/class-bsu-content-qa.php';
 $content_qa = new BSU_Content_QA( $html_to_check, $args ); // $args is optional
 ```
 
