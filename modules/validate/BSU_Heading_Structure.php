@@ -88,7 +88,7 @@ class BSU_Heading_Structure extends BSU_Base_Module {
 
 					$this->error_stacker(
 						'Incorrect first heading',
-						'Headings must start at H' . $headings_start . '. The first heading <strong>' . $h->nodeValue . '</strong> is using <strong>' . strtoupper( $h->tagName ) . '</strong>. <a target="_blank" href="https://www.w3.org/WAI/tutorials/page-structure/headings/">More about using headings</a>.',
+						'The first heading <strong>' . $h->nodeValue . '</strong> is using <strong>' . strtoupper( $h->tagName ) . '</strong>. Headings must start at H' . $headings_start . '. <a target="_blank" href="https://www.w3.org/WAI/tutorials/page-structure/headings/">Learn about using headings</a>.',
 						3
 					);
 				}
@@ -103,7 +103,7 @@ class BSU_Heading_Structure extends BSU_Base_Module {
 
 					$this->error_stacker(
 						'Heading heirarchy is incorrect',
-						'Headings are used to define content structure. The heading <strong>' . $h->nodeValue . '</strong> is an H' . $current_h_num . ' following an H' . $previous_h_num . '. <a target="_blank" href="https://www.w3.org/WAI/tutorials/page-structure/headings/">More about using headings.</a>.',
+						'The heading <strong>' . $h->nodeValue . '</strong> is an H' . $current_h_num . ' following an H' . $previous_h_num . '. Headings are used to define content structure. <a target="_blank" href="https://www.w3.org/WAI/tutorials/page-structure/headings/">Learn about using headings.</a>.',
 						3
 					);
 				}
@@ -157,7 +157,7 @@ class BSU_Heading_Structure extends BSU_Base_Module {
 					 */
 					$this->error_stacker(
 						'No content found in a section',
-						'No content was found after <strong>' . $h->nodeValue . '</strong>. Each section should have text content.',
+						'No content was found after <strong>' . $h->nodeValue . '</strong>. Each section should have text content. <a target="_blank" href="https://www.w3.org/WAI/tutorials/page-structure/headings/">Learn about using headings.</a>.',
 						3
 					);
 
@@ -171,7 +171,7 @@ class BSU_Heading_Structure extends BSU_Base_Module {
 					 */
 					$this->error_stacker(
 						'No content found in a section',
-						'No content was found between <strong>' . $h->nodeValue . '</strong> and the next <strong>' . strtoupper( $sibling->nodeName ) . '</strong>. Each section should have text content.',
+						'No content was found between <strong>' . $h->nodeValue . '</strong> and the next <strong>' . strtoupper( $sibling->nodeName ) . '</strong>. Each section should have text content. <a target="_blank" href="https://www.w3.org/WAI/tutorials/page-structure/headings/">Learn about using headings.</a>.',
 						3
 					);
 				}
