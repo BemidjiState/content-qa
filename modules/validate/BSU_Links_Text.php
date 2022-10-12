@@ -88,12 +88,13 @@ class BSU_Links_Text extends BSU_Base_Module {
 	public function check_for_click_here( DOMElement $a ) {
 
 		// Try to prevent vague links that say click here/this or just the text here/this.
-		$text_contains_click_here = preg_match( '/(click)( this| here)?|^(this|here)$/i', $a->textContent );
+		$text_contains_click_here = preg_match( '/\bclick(ing)?\b|( )?(this|here|link)[[:punct:]]?$/i', $a->textContent );
+
 		if ( ! empty( $text_contains_click_here ) ) {
 
 			$this->error_stacker(
 				'A link says "click here"',
-				'The linked text <strong>"' . $a->textContent . '"</strong> is too vague or contains text like "click here." Links should indicate relevant information about the link target. <a target="_blank" href="https://www.w3.org/WAI/tips/writing/#make-link-text-meaningful">More about making meaningful links</a>.',
+				'The linked text <strong>"' . $a->textContent . '"</strong> is too vague. Use link text that is helpful to your reader. Helpful link text indicates relevant information about the link target. <a target="_blank" href="https://www.w3.org/WAI/tips/writing/#make-link-text-meaningful">How to make link text meaningful</a>.',
 				3,
 			);
 		}

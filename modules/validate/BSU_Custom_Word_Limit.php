@@ -63,7 +63,7 @@ class BSU_Custom_Word_Limit extends BSU_Base_Module {
 
 			$this->error_stacker(
 				'Too many words',
-				'The maximum number of words that can be used in the content of this page is ' . $limit . '. There were ' . $word_count . ' words found.',
+				'The maximum number of words allowed in the content of this page is ' . $limit . '. There were ' . $word_count . ' words found.',
 				3,
 			);
 		}
