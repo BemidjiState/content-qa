@@ -59,7 +59,7 @@ class BSU_Images extends BSU_Base_Module {
 				$img_name = basename( $img->getAttribute( 'src' ) );
 				$this->error_stacker(
 					'Alt tag is missing',
-					'The <strong>alt</strong> value must be descriptive enough to use as an appropriate replacement for the image. The alt attribute is missing for <strong>' . $img_name . '</strong>. <a target="_blank" href="https://www.w3.org/WAI/tutorials/images/">More about using the alternate text attribute</a>.',
+					'The alt attribute is missing for <strong>' . $img_name . '</strong>. The <strong>alt</strong> value must be descriptive enough to use as an appropriate replacement for the image. <a target="_blank" href="https://www.w3.org/WAI/tutorials/images/">Learn about using the alternate text attribute</a>.',
 					3,
 				);
 			}
