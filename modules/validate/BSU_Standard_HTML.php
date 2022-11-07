@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * option. Reasons could be due to firewall or other config settings that prevent loading files from
  * outside of the server.
  *
- * @uses DOMDocument
+ * @uses DOMDocument, DOMXPath
  *
  * @package content-qa
  * @since 1.0.0
