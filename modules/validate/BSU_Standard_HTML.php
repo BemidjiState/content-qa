@@ -52,11 +52,12 @@ class BSU_Standard_HTML extends BSU_Base_Module {
 
 
 	/**
-	 * Summary of the function.
+	 * Searches for all HTML elements using the ID attribute. Then looks for any that use the same
+	 * value for the ID attribute.
 	 *
-	 * Optional expanded description of the function, can include uses or formatting information.
+	 * @uses DOMDocument, DOMXPath
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 */
 	public function identify_duplicate_ids() {
 
