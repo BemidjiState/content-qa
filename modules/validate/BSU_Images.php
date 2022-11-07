@@ -54,7 +54,9 @@ class BSU_Images extends BSU_Base_Module {
 			$alt_attr = $img->getAttribute( 'alt' );
 			if ( empty( $alt_attr ) ) {
 
-				/* More info on alt attr: https://html.spec.whatwg.org/multipage/images.html#alt */
+				/**
+				 * More info on alt attr: https://html.spec.whatwg.org/multipage/images.html#alt
+				 */
 
 				$img_name = basename( $img->getAttribute( 'src' ) );
 				$this->error_stacker(
