@@ -64,12 +64,12 @@ class BSU_Custom_P_Limit extends BSU_Base_Module {
 		if ( $p_tags->length > $limit ) {
 
 			$count_text = sprintf(
-				ngettext( 'was %x paragraph', 'were %x paragraphs', $p_tags->length ),
+				ngettext( 'was %s paragraph', 'were %s paragraphs', $p_tags->length ),
 				$p_tags->length
 			);
 
 			$limit_text = sprintf(
-				ngettext( '%x paragraph is', '%x paragraphs are', $limit ),
+				ngettext( '%s paragraph is', '%s paragraphs are', $limit ),
 				$limit
 			);
 
