@@ -229,4 +229,31 @@ class BSU_Base_Module {
 
 		return $node;
 	}
+
+
+
+
+
+
+
+	/**
+	 * Used to provide consistant word counts within this class.
+	 *
+	 * @since 1.0.3
+	 *
+	 * @param string $text The text that words will be counted from.
+	 *
+	 * @return int $word_count The number of words found.
+	 */
+	public function word_count( $text ) {
+
+		/**
+		 * Trying to allow exceptions to some characters that would normally break a word. This
+		 * may not match other word counters (e.g. WordPress editors) that do not consider a number
+		 * (e.g. 2022 or 1.25) a word.
+		 */
+		$word_count = str_word_count( $text, 0, ".&'’0123456789" );
+
+		return $word_count;
+	}
 }

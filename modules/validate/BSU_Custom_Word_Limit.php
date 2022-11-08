@@ -56,8 +56,7 @@ class BSU_Custom_Word_Limit extends BSU_Base_Module {
 	 */
 	public function check_word_count( int $limit ) {
 
-		// Trying to allow acceptions to match the WP word count on the classic editor.
-		$word_count = str_word_count( $this->dom->textContent, 0, "'’0123456789" );
+		$word_count = $this->word_count( $this->dom->textContent );
 
 		if ( $word_count > $limit ) {
 
