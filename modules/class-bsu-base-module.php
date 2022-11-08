@@ -248,10 +248,11 @@ class BSU_Base_Module {
 	public function word_count( $text ) {
 
 		/**
-		 * Trying to allow acceptions to some characters that would normally break a word. This
-		 * matches the WP word count on the classic editor which provides an accurate count.
+		 * Trying to allow exceptions to some characters that would normally break a word. This
+		 * may not match other word counters (e.g. WordPress editors) that do not consider a number
+		 * (e.g. 2022 or 1.25) a word.
 		 */
-		$word_count = str_word_count( $text, 0, "'’0123456789" );
+		$word_count = str_word_count( $text, 0, ".&'’0123456789" );
 
 		return $word_count;
 	}
