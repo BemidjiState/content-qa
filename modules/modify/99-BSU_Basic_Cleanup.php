@@ -83,7 +83,7 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		foreach ( $each_node as $n ) {
 
 			// No lenght means there are no children.
-			if ( 0 >= $n->length ) {
+			if ( property_exists( $n, 'length' ) && 0 >= $n->length ) {
 				$n->parentNode->removeChild( $n );
 			}
 		}

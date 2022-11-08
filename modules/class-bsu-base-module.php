@@ -229,4 +229,30 @@ class BSU_Base_Module {
 
 		return $node;
 	}
+
+
+
+
+
+
+
+	/**
+	 * Used to provide consistant word counts within this class.
+	 *
+	 * @since 1.0.3
+	 *
+	 * @param string $text The text that words will be counted from.
+	 *
+	 * @return int $word_count The number of words found.
+	 */
+	public function word_count( $text ) {
+
+		/**
+		 * Trying to allow acceptions to some characters that would normally break a word. This
+		 * matches the WP word count on the classic editor which provides an accurate count.
+		 */
+		$word_count = str_word_count( $text, 0, "'’0123456789" );
+
+		return $word_count;
+	}
 }
