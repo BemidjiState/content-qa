@@ -31,6 +31,8 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 		$this->remove_all_empty_tags();
 
+		$this->remove_multiple_spaces();
+
 	}
 
 
@@ -83,9 +85,59 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		foreach ( $each_node as $n ) {
 
 			// No lenght means there are no children.
-			if ( property_exists( $n, 'length' ) && 0 >= $n->length ) {
+			if ( 0 >= $n->length ) {
 				$n->parentNode->removeChild( $n );
 			}
+		}
+	}
+
+
+
+
+
+
+
+	/**
+	 * Summary of the function.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @link Void elements https://www.w3.org/TR/2011/WD-html-markup-20110113/syntax.html#syntax-elements
+	 *
+	 * @return void No error output. Quietly remove multiple spaces between text for the user.
+	 */
+	public function remove_multiple_spaces() {
+
+		$xpath = new DOMXPath( $this->dom );
+
+		// Ignored tags that will always be empty (aka void elements).
+		$ignored_tags = array(
+			'area',
+			'base',
+			'br',
+			'hr',
+			'img',
+			'input',
+			'link',
+			'meta',
+			'param',
+			'command',
+			'keygen',
+			'source',
+		);
+
+		// Create the string of ignored tags for the XPath query.
+		$ignored_tags_query = '';
+		foreach ( $ignored_tags as $tag ) {
+			$ignored_tags_query .= ' and not(name()="' . $tag . '")';
+		}
+
+		foreach ($xpath->query( '//*[not(*)' . $ignored_tags_query . ']' ) as $n){
+			$str = $n->nodeValue;
+			$str = str_replace('&nbsp;', ' ', $str);
+			$str = preg_replace('/\s+/u', ' ', $str);
+
+			$n->nodeValue = trim($str);
 		}
 	}
 }
