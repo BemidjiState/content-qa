@@ -133,9 +133,9 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		}
 
 		// Get a list of nodes that contain only spaces and do not have child nodes.
-		$each_node = $xpath->query( '//*[not(*)' . $ignored_tags_query . ']' );
+		$each_node = $xpath->query( '//*[not(*)' . $ignored_tags_query . '] | //text()[not(*)' . $ignored_tags_query . ']' );
 
-		foreach ($each_node as $n){
+		foreach ( $each_node as $n ) {
 			if ( is_object( $n ) && property_exists( $n, 'nodeValue' ) ) {
 				var_dump($n);
 				$str = $n->nodeValue;
