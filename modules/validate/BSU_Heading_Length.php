@@ -39,7 +39,8 @@ class BSU_Heading_Length extends BSU_Base_Module {
 
 
 	/**
-	 * Validate heading length and generate error messages if length is greater than 100 characters.
+	 * Validate heading length and generate level 2 error message if length is greater than 100 characters
+	 * or a level 3 error message if length is greater than 150 characters.
 	 *
 	 * The default start is H2 since themes/tools should usually add the H1 automatically.
 	 *
@@ -62,11 +63,21 @@ class BSU_Heading_Length extends BSU_Base_Module {
 		$h_tags = $xpath->query( $headings_xpath_query );
 
 		foreach ( $h_tags as $h ) {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			if ( strlen( $h->nodeValue ) > 100 ) {
 				$this->error_stacker(
 					'Heading Length Error',
 					'This content contains a very long Heading. Headings should not be longer than 100 characters in length. Consider shortening any Headings longer than 100 characters.',
 					2,
+				);
+			}
+
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			if ( strlen( $h->nodeValue ) > 150 ) {
+				$this->error_stacker(
+					'Heading Length Error',
+					'This content contains a Heading longer that 150 characters. Headings longer than 150 characters are not allowed and should be 100 characters or less. Consider shortening any Headings longer than 100 characters.',
+					3,
 				);
 			}
 		}
