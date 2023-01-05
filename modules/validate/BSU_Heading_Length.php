@@ -66,7 +66,7 @@ class BSU_Heading_Length extends BSU_Base_Module {
 				$this->error_stacker(
 					'Heading Length Error',
 					'This content contains a very long Heading. Headings should not be longer than 100 characters in length. Consider shortening any Headings longer than 100 characters.',
-					3,
+					2,
 				);
 			}
 		}
