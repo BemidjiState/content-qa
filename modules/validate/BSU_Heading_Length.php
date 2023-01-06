@@ -1,4 +1,5 @@
 <?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
+// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -63,21 +64,17 @@ class BSU_Heading_Length extends BSU_Base_Module {
 		$h_tags = $xpath->query( $headings_xpath_query );
 
 		foreach ( $h_tags as $h ) {
-			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			if ( strlen( $h->nodeValue ) > 100 ) {
-				$this->error_stacker(
-					'Heading Length Error',
-					'This content contains a very long Heading. Headings should not be longer than 100 characters in length. Consider shortening any Headings longer than 100 characters.',
-					2,
-				);
-			}
-
-			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			if ( strlen( $h->nodeValue ) > 150 ) {
 				$this->error_stacker(
 					'Heading Length Error',
 					'This content contains a Heading longer that 150 characters. Headings longer than 150 characters are not allowed and should be 100 characters or less. Consider shortening any Headings longer than 100 characters.',
 					3,
+				);
+			} else if ( strlen( $h->nodeValue ) > 100 ) {
+				$this->error_stacker(
+					'Heading Length Error',
+					'This content contains a very long Heading. Headings should not be longer than 100 characters in length. Consider shortening any Headings longer than 100 characters.',
+					2,
 				);
 			}
 		}
