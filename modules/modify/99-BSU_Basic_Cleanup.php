@@ -1,4 +1,5 @@
 <?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
+// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,7 +33,6 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		$this->remove_all_empty_tags();
 
 		$this->remove_multiple_spaces();
-
 	}
 
 
@@ -83,9 +83,9 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 		// Loop through the found nodes. Remove all except the ignored tag listed in the array.
 		foreach ( $each_node as $n ) {
-
 			// No length means there are no children.
-			if ( is_object( $n ) && property_exists( $n, 'length' ) && 0 >= $n->length ) {
+			// property_exists( $n, 'length' ) was tried but doesn't seem to do anything and it does cause the condition not to work.
+			if ( is_object( $n ) && 0 >= $n->length ) {
 				$n->parentNode->removeChild( $n );
 			}
 		}
@@ -133,22 +133,14 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		}
 
 		// Get a list of nodes that contain only spaces and do not have child nodes.
-		$each_node = $xpath->query( '//*[not(*)' . $ignored_tags_query . '] | //text()[not(*)' . $ignored_tags_query . ']' );
+		$each_node = $xpath->query( '//*[not(*)' . $ignored_tags_query . '] | //text()' );
 
 		foreach ( $each_node as $n ) {
 			if ( is_object( $n ) && property_exists( $n, 'nodeValue' ) ) {
-				var_dump($n);
 				$str = $n->nodeValue;
-
-				//$str = str_replace('&nbsp;', ' ', htmlentities($str));
-				$str = preg_replace('/\h+/u', ' ', $str);
-
-				echo '<br />==========New String: ' . trim($str);
-
-				$n->nodeValue = trim($str);
-				echo '<br />==========Node Value: ' . $n->nodeValue;
-				echo '<br />==========Node Text Content: ' . $n->textContent;
-				var_dump($n);
+				$str = preg_replace( '/\h+/u', ' ', $str );
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+				$n->nodeValue = $str;
 			}
 		}
 	}
