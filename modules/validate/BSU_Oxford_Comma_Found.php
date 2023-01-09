@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package content-qa
  * @since 1.0.0
  */
-class BSU_Oxford_Comma extends BSU_Base_Module {
+class BSU_Oxford_Comma_Found extends BSU_Base_Module {
 
 
 

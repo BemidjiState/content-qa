@@ -101,7 +101,7 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 
 	/**
-	 * Summary of the function.
+	 * Removes any multiple spaces in the content being evaluated.
 	 *
 	 * @since 1.0.0
 	 *
