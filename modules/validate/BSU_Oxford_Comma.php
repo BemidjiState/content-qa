@@ -185,7 +185,7 @@ class BSU_Oxford_Comma extends BSU_Base_Module {
 				$oxford_comma_text = str_replace( ', and', '<span style="background-color:yellow">, and</span>', $oxford_comma_text );
 				$oxford_comma_text = str_replace( ',and', '<span style="background-color:yellow">,and</span>', $oxford_comma_text );
 
-				$this->error_stacker( 'Oxford Comma Error', 'The following line may contain an Oxford comma: ' . $oxford_comma_text, 2 );
+				$this->error_stacker( 'Oxford Comma Error', '<strong>The following line may contain an Oxford comma:</strong> ' . $oxford_comma_text, 2 );
 			}
 		}
 	}
