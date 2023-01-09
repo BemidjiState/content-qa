@@ -75,6 +75,7 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		// Create the string of ignored tags for the XPath query.
 		$ignored_tags_query = '';
 		foreach ( $ignored_tags as $tag ) {
+
 			$ignored_tags_query .= ' and not(name()="' . $tag . '")';
 		}
 
@@ -83,9 +84,11 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 		// Loop through the found nodes. Remove all except the ignored tag listed in the array.
 		foreach ( $each_node as $n ) {
+
 			// No length means there are no children.
 			// property_exists( $n, 'length' ) was tried but doesn't seem to do anything and it does cause the condition not to work.
 			if ( is_object( $n ) && 0 >= $n->length ) {
+
 				$n->parentNode->removeChild( $n );
 			}
 		}
@@ -129,6 +132,7 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		// Create the string of ignored tags for the XPath query.
 		$ignored_tags_query = '';
 		foreach ( $ignored_tags as $tag ) {
+
 			$ignored_tags_query .= ' and not(name()="' . $tag . '")';
 		}
 
@@ -136,7 +140,9 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		$each_node = $xpath->query( '//*[not(*)' . $ignored_tags_query . '] | //text()' );
 
 		foreach ( $each_node as $n ) {
+
 			if ( is_object( $n ) && property_exists( $n, 'nodeValue' ) ) {
+
 				$str = $n->nodeValue;
 				$str = preg_replace( '/\h+/u', ' ', $str );
 				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase

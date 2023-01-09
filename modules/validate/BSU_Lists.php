@@ -54,7 +54,8 @@ class BSU_Lists extends BSU_Base_Module {
 		// Get the number of lists containing just a single list item.
 		$single_item_list_count = $xpath->query( '(//ul|//ol|//dl)[count(./li|./dd|./dt) <= 1]' );
 
-		if(count($single_item_list_count) > 0){
+		if ( count( $single_item_list_count ) > 0 ) {
+
 			$this->error_stacker(
 				'List Item Count Error',
 				'There is a list containing a single item. Single item lists are not allowed. Consider using a new paragraph instead.',
@@ -81,7 +82,8 @@ class BSU_Lists extends BSU_Base_Module {
 		// Get the number of lists that contain list items without content.
 		$lists_with_empty_list_item_count = $xpath->query( '(//ul|//ol|//dl)[./li[string-length()=0]|./dd[string-length()=0]|./dt[string-length()=0]]' );
 
-		if(count($lists_with_empty_list_item_count) > 0){
+		if ( count( $lists_with_empty_list_item_count ) > 0 ) {
+
 			$this->error_stacker(
 				'List Item Count Error',
 				'There is a list containing one or more items with no content.',

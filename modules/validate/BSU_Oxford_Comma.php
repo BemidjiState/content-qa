@@ -40,83 +40,6 @@ class BSU_Oxford_Comma extends BSU_Base_Module {
 
 
 
-	/**
-	 * Adds final comma when one does not exists in a series of three or more terms
-	 *
-	 * @since 1.0.0
-	 */
-	public function check_for_missing_oxford_commas() {
-
-		$xpath = new DOMXPath( $this->dom );
-
-		// Ignored tags that will always be empty (aka void elements).
-		$ignored_tags = array(
-			'area',
-			'base',
-			'br',
-			'hr',
-			'img',
-			'input',
-			'link',
-			'meta',
-			'param',
-			'command',
-			'keygen',
-			'source',
-		);
-
-		// Create the string of ignored tags for the XPath query.
-		$ignored_tags_query = '';
-		foreach ( $ignored_tags as $tag ) {
-			$ignored_tags_query .= ' and not(name()="' . $tag . '")';
-		}
-
-		// Get a list of nodes that contain only spaces and do not have child nodes.
-		$each_node = $xpath->query( '//*[not(*)' . $ignored_tags_query . '] | //text()' );
-
-		// Loop through the found nodes. Remove all except the ignored tag listed in the array.
-		foreach ( $each_node as $n ) {
-			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			$text_groups = explode( '.', $n->nodeValue );
-
-			$new_text_groups = array();
-
-			foreach ( $text_groups as $str ) {
-				$terms = explode( ',', $str );
-
-				if ( count( $terms ) > 1 ) {
-
-					$last_term = trim( end( $terms ) );
-
-					if ( strtolower( substr( $last_term, 0, 3 ) ) == 'and' ) {
-						array_push( $new_text_groups, $str );
-						continue;
-					}
-
-					if ( strpos( $last_term, 'and' ) !== false ) {
-						$new_last_term = str_replace( 'and', ', and', $last_term );
-					} else {
-						$new_last_term = ' and ' . $last_term;
-					}
-
-					array_pop( $terms );
-					array_push( $terms, str_replace( ' , ', ', ', $new_last_term ) );
-					$new_str = implode( ', ', $terms );
-
-					array_push( $new_text_groups, $new_str );
-				}
-			}
-
-			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			$n->nodeValue = implode( '. ', $new_text_groups );
-		}
-	}
-
-
-
-
-
-
 
 	/**
 	 * Removes comma before and if one exists in a series of three or more terms
@@ -146,28 +69,32 @@ class BSU_Oxford_Comma extends BSU_Base_Module {
 		// Create the string of ignored tags for the XPath query.
 		$ignored_tags_query = '';
 		foreach ( $ignored_tags as $tag ) {
+
 			$ignored_tags_query .= ' and not(name()="' . $tag . '")';
 		}
 
 		// Get a list of nodes that contain only spaces and do not have child nodes.
-		$each_node = $xpath->query( '(//ul|//ol|//dl|//li|//p|//h1|//h2|//h3|//h4|//h5|//h6|//td|//th|//div|//cite|//figure|//caption|//span|//a)' );
+		$each_node = $xpath->query( '(//dl|//li|//p|//h1|//h2|//h3|//h4|//h5|//h6|//td|//th|//div|//cite|//figure|//caption|//span|//a|//legend)' );
 
 		$default_oxford_comma_error = 'It looks like this content may contain Oxford (Serial) commas. To keep content standardized it is best to avoid using Oxford commas. Please remove any commas placed immediately after the last term in a series of three or more terms.
 			<p>
 				For example, "My usual breakfast is coffee, bacon, and eggs" should be "My usual breakfast is coffee, bacon and eggs".
 			<br />
-				For more info on Oxford (Serial) commas, See: <a href="https://en.wikipedia.org/wiki/Serial_comma" target="_blank">https://en.wikipedia.org/wiki/Serial_comma</a>
+				<a href="https://en.wikipedia.org/wiki/Serial_comma" target="_blank">For more info on Oxford (Serial) commas read this Wikipedia article</a>.
 			</p>';
 
 		$oxford_comma_text_arr = array();
 
 		// Loop through the found nodes. Remove all except the ignored tag listed in the array.
 		foreach ( $each_node as $n ) {
+
 			$str = $n->nodeValue;
 
 			$matches = array();
 			if ( preg_match( '/([0-9a-z ]+, ?+){2,}(and|or) +[0-9a-z]+/mi', $str, $matches ) ) {
+
 				foreach ( $matches as $match ) {
+
 					array_push( $oxford_comma_text_arr, $str );
 				}
 			}
@@ -178,14 +105,16 @@ class BSU_Oxford_Comma extends BSU_Base_Module {
 
 		// If a string was added to the array "oxford_comma_text_arr", display an error.
 		if ( count( $oxford_comma_text_arr ) >= 1 ) {
+
 			$this->error_stacker( 'Oxford Comma Error', $default_oxford_comma_error, 2 );
 
 			foreach ( $oxford_comma_text_arr as $oxford_comma_text ) {
-				// highlight where the Oxford comma might exists.
-				$oxford_comma_text = str_replace( ', and', '<span style="background-color:yellow">, and</span>', $oxford_comma_text );
-				$oxford_comma_text = str_replace( ',and', '<span style="background-color:yellow">,and</span>', $oxford_comma_text );
 
-				$this->error_stacker( 'Oxford Comma Error', '<strong>The following line may contain an Oxford comma:</strong> ' . $oxford_comma_text, 2 );
+				// highlight where the Oxford comma might exists.
+				$oxford_comma_text = str_replace( ', and', '<span class="bsu-highlight-color">, and</span>', $oxford_comma_text );
+				$oxford_comma_text = str_replace( ',and', '<span class="bsu-highlight-color">,and</span>', $oxford_comma_text );
+
+				$this->error_stacker( 'Oxford Comma Error', 'An Oxford comma may exist in "<strong>' . $oxford_comma_text . '</strong>" and should possibly be removed.', 2 );
 			}
 		}
 	}
