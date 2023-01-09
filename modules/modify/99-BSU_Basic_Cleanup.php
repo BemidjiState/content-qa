@@ -1,4 +1,5 @@
 <?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- The filename is used by autoloader.
+// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,6 +32,7 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 		$this->remove_all_empty_tags();
 
+		$this->remove_multiple_spaces();
 	}
 
 
@@ -73,6 +75,7 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		// Create the string of ignored tags for the XPath query.
 		$ignored_tags_query = '';
 		foreach ( $ignored_tags as $tag ) {
+
 			$ignored_tags_query .= ' and not(name()="' . $tag . '")';
 		}
 
@@ -82,9 +85,68 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		// Loop through the found nodes. Remove all except the ignored tag listed in the array.
 		foreach ( $each_node as $n ) {
 
-			// No lenght means there are no children.
-			if ( property_exists( $n, 'length' ) && 0 >= $n->length ) {
+			// No length means there are no children.
+			// property_exists( $n, 'length' ) was tried but doesn't seem to do anything and it does cause the condition not to work.
+			if ( is_object( $n ) && 0 >= $n->length ) {
+
 				$n->parentNode->removeChild( $n );
+			}
+		}
+	}
+
+
+
+
+
+
+
+	/**
+	 * Removes any multiple spaces in the content being evaluated.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @link Void elements https://www.w3.org/TR/2011/WD-html-markup-20110113/syntax.html#syntax-elements
+	 *
+	 * @return void No error output. Quietly remove multiple spaces between text for the user.
+	 */
+	public function remove_multiple_spaces() {
+
+		$xpath = new DOMXPath( $this->dom );
+
+		// Ignored tags that will always be empty (aka void elements).
+		$ignored_tags = array(
+			'area',
+			'base',
+			'br',
+			'hr',
+			'img',
+			'input',
+			'link',
+			'meta',
+			'param',
+			'command',
+			'keygen',
+			'source',
+		);
+
+		// Create the string of ignored tags for the XPath query.
+		$ignored_tags_query = '';
+		foreach ( $ignored_tags as $tag ) {
+
+			$ignored_tags_query .= ' and not(name()="' . $tag . '")';
+		}
+
+		// Get a list of nodes that contain only spaces and do not have child nodes.
+		$each_node = $xpath->query( '//*[not(*)' . $ignored_tags_query . '] | //text()' );
+
+		foreach ( $each_node as $n ) {
+
+			if ( is_object( $n ) && property_exists( $n, 'nodeValue' ) ) {
+
+				$str = $n->nodeValue;
+				$str = preg_replace( '/\h+/u', ' ', $str );
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+				$n->nodeValue = $str;
 			}
 		}
 	}
