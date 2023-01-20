@@ -145,8 +145,10 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 				$str = $n->nodeValue;
 				$str = preg_replace( '/\h+/u', ' ', $str );
+				// encode ampersands and greater/less than symbols on the final output...
+				// ...ignoring double and single quotes, setting charset to null, and double ecoding to false.
 				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-				$n->nodeValue = $str;
+				$n->nodeValue = htmlspecialchars( $str, ENT_NOQUOTES, null, false );
 			}
 		}
 	}
