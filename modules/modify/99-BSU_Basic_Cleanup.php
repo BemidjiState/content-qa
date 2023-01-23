@@ -31,7 +31,6 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 		parent::__construct( $dom, $args );
 
 		$this->remove_all_empty_tags();
-
 		$this->remove_multiple_spaces();
 	}
 
@@ -42,7 +41,7 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 
 	/**
-	 * Summary of the function.
+	 * Check for empty HTML tags and remove them if they have no children or text content.
 	 *
 	 * @since 1.0.0
 	 *
@@ -145,10 +144,14 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 				$str = $n->nodeValue;
 				$str = preg_replace( '/\h+/u', ' ', $str );
-				// encode ampersands and greater/less than symbols on the final output...
-				// ...ignoring double and single quotes, setting charset to null, and double ecoding to false.
+              
+              	/**
+                 * Note that if you are doing anything with encoding some issues have been seen with ampersands and greater/less than. Avoid doing
+                 * anything with encoding in Content QA. Instead handle that outside of the class. Something like htmlspecialchars() may provide
+                 * the needed results.
+                 */
 				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-				$n->nodeValue = htmlspecialchars( $str, ENT_NOQUOTES, null, false );
+				$n->nodeValue = $str;
 			}
 		}
 	}
