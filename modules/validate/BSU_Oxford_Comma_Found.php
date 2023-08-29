@@ -76,12 +76,7 @@ class BSU_Oxford_Comma_Found extends BSU_Base_Module {
 		// Get a list of nodes that contain only spaces and do not have child nodes.
 		$each_node = $xpath->query( '(//dl|//li|//p|//h1|//h2|//h3|//h4|//h5|//h6|//td|//th|//div|//cite|//figure|//caption|//span|//a|//legend)' );
 
-		$default_oxford_comma_error = 'It looks like this content may contain Oxford (Serial) commas. To keep content standardized it is best to avoid using Oxford commas. Please remove any commas placed immediately after the last term in a series of three or more terms.
-			<p>
-				For example, "My usual breakfast is coffee, bacon, and eggs" should be "My usual breakfast is coffee, bacon and eggs".
-			<br />
-				<a href="https://en.wikipedia.org/wiki/Serial_comma" target="_blank">For more info on Oxford (Serial) commas read this Wikipedia article</a>.
-			</p>';
+		$default_oxford_comma_error = 'It looks like this content may contain Oxford (Serial) commas. To keep content standardized it is best to refrain from using Oxford commas. Please remove any commas that are placed immediately after the last term in a series of three or more terms. For example, "My usual breakfast is coffee, bacon, and eggs" should be "My usual breakfast is coffee, bacon and eggs". <a href="https://en.wikipedia.org/wiki/Serial_comma" target="_blank">Learn more about Oxford (Serial) commas</a>.';
 
 		$oxford_comma_text_arr = array();
 
@@ -110,12 +105,18 @@ class BSU_Oxford_Comma_Found extends BSU_Base_Module {
 
 			foreach ( $oxford_comma_text_arr as $oxford_comma_text ) {
 
-				// highlight where the Oxford comma might exists.
-				$oxford_comma_text = str_replace( ', and', '<span class="bsu-highlight-color">, and</span>', $oxford_comma_text );
-				$oxford_comma_text = str_replace( ',and', '<span class="bsu-highlight-color">,and</span>', $oxford_comma_text );
+				/**
+				 * Highlight where the Oxford comma might exists.
+				 *
+				 * The use of Bootstrap's .bg-warning is helpful for highlighting the comma. Content
+				 * QA is standalone and Bootstrap is not included with it.
+				 */
+				$oxford_comma_text = str_replace( ', and', '<span class="bg-warning">, and</span>', $oxford_comma_text );
+				$oxford_comma_text = str_replace( ',and', '<span class="bg-warning">,and</span>', $oxford_comma_text );
 
 				$this->error_stacker( 'Oxford Comma Error', 'An Oxford comma may exist in "<strong>' . $oxford_comma_text . '</strong>" and should possibly be removed.', 2 );
 			}
 		}
 	}
 }
+
