@@ -283,20 +283,47 @@ class BSU_Content_QA {
 	 * @since 1.0.0
 	 *
 	 * @param string $html The HTML to inspect.
-	 * @param string $to_encoding The type of encoding that $html is being converted to.
-	 * @param string $from_encoding Is specified by character code names before conversion.
 	 *
 	 * @return string $encoded_html The HTML converted to specified encoding.
 	 */
-	protected function encode_html( string $html, $to_encoding = 'HTML-ENTITIES', $from_encoding = 'UTF-8' ) {
+	protected function encode_html( string $html ) {
 
 		$trimmed_html = trim( $html );
-		$encoded_html = mb_convert_encoding( $trimmed_html, $to_encoding, $from_encoding );
 
+		/**
+		 * Check the PHP version and encode accordingly. mb_convert_encoding() is deprecated in PHP
+		 * 8 so we must use a number of other functions to achieve the correct encoding.
+		 */
+		if ( phpversion() < 8.1 ) {
+
+			// Encoding for PHP 8.0 and earlier.
+			$encoded_html = mb_convert_encoding( $trimmed_html, 'HTML-ENTITIES', 'UTF-8' );
+
+		} else {
+
+			/**
+			 * Encoding for PHP 8.1 and later versions. This will not work in earlier versions due
+			 * to flags not being available until PHP 8.1 (e.g. ENT_NOQUOTES).
+			 */
+			$encoded_html = mb_encode_numericentity(
+				htmlspecialchars_decode(
+					htmlentities( $html, ENT_NOQUOTES, 'UTF-8', false ),
+					ENT_NOQUOTES
+				),
+				array(
+					0x80,
+					0x10FFFF,
+					0,
+					~0,
+				),
+				'UTF-8'
+			);
+
+		}
+
+		// Avoid returning an empty string.
 		if ( empty( $encoded_html ) ) {
-
 			$encoded_html = false;
-
 		}
 
 		return $encoded_html;
