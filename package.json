@@ -1,6 +1,6 @@
 {
 	"name": "content-qa",
-	"version": "1.1.4",
+	"version": "1.1.5",
 	"author": "BSU Web Services",
 	"description": "Validates and modifies content based on configurable rules/modules.",
 	"repository": {
