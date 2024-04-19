@@ -75,7 +75,7 @@ class BSU_Custom_P_Limit extends BSU_Base_Module {
 
 			$this->error_stacker(
 				'Too many paragraphs',
-				"Only ${limit_text} allowed. There ${count_text} found in the content.",
+				"Only {$limit_text} allowed. There {$count_text} found in the content.",
 				3,
 			);
 		}
