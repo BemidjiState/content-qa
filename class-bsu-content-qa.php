@@ -40,7 +40,7 @@ class BSU_Content_QA {
 	 *
 	 * @var string
 	 */
-	public $temp_wrapper_id;
+	private $temp_wrapper_id;
 
 	/**
 	 * The heading level to start at.
@@ -141,9 +141,11 @@ class BSU_Content_QA {
 	 */
 	public function __construct( string $html, array $args = array() ) {
 
+		$this->temp_wrapper_id    = $this->get_unique_id();
 		$this->mode               = $this->get_mode( $args );
 		$this->modules_discovered = $this->discover_modules();
 
+		// Check if any modules were configured to be disabled.
 		if ( array_key_exists( 'modules_disabled', $args ) && is_array( $args['modules_disabled'] ) ) {
 			$this->modules_disabled = $args['modules_disabled'];
 		}
@@ -335,6 +337,34 @@ class BSU_Content_QA {
 
 
 	/**
+	 * Generates a random unique ID to use for this instance of the class. This is used for
+	 * referencing a wrapper that is added by DOMDocument so it can easily be referred to.
+	 *
+	 * @return string $unique_id A random unique ID.
+	 */
+	private function get_unique_id() {
+
+		// Check if we need to generate the ID or if one has already been generated.
+		if ( empty( $this->temp_wrapper_id ) ) {
+
+			// Generate a unique ID with a set prefix.
+			$unique_id = uniqid( 'bsu_validator_tmp_wrapper_' );
+
+		} else {
+
+			$unique_id = $this->temp_wrapper_id;
+
+		}
+
+		return $unique_id;
+	}
+
+
+
+
+
+
+	/**
 	 * Create a DOMDocument object with the HTML to be inspected.
 	 *
 	 * @since 1.0.0
@@ -360,8 +390,7 @@ class BSU_Content_QA {
 		 */
 		$found_wrapper = preg_match( '/(<html>)|(<body>)/', $html );
 		if ( empty( $found_wrapper ) ) {
-			$rand_id = uniqid( 'bsu_validator_tmp_wrapper_' );
-			$html    = '<div id="' . $rand_id . '">' . $html . '</div>';
+			$html = '<div id="' . $this->temp_wrapper_id . '">' . $html . '</div>';
 		}
 
 		// Load the HTML without creating doctype or html/body tags if they are missing.
@@ -370,11 +399,6 @@ class BSU_Content_QA {
 		if ( empty( $html_loaded ) ) {
 			// Something went wrong if we are in here.
 			$dom_object = false;
-		}
-
-		if ( isset( $rand_id ) ) {
-			// Share the temp wrapper id with the new DOMDocument object for later use.
-			$dom_object->temp_wrapper_id = $rand_id;
 		}
 
 		// Get any errors from when the HTML was loaded.
@@ -638,6 +662,7 @@ class BSU_Content_QA {
 	 */
 	public function get_html( $get_original_dom = false ) {
 
+		// Init the output var to null in case no conditions are met to populate it.
 		$html = null;
 
 		// Check if a flag to get the original, unmodified DOM was passed.
@@ -647,17 +672,16 @@ class BSU_Content_QA {
 			$dom_to_use = $this->dom;
 		}
 
+		// Only do work if a valid DOM object was found.
 		if ( isset( $dom_to_use ) && is_object( $dom_to_use ) ) {
 
-			if ( isset( $dom_to_use->temp_wrapper_id ) ) {
+			// Get the temp wrapper node if it exists.
+			$temp_wrapper = $dom_to_use->getElementById( $this->temp_wrapper_id );
 
-				$temp_wrapper = $dom_to_use->getElementById( $dom_to_use->temp_wrapper_id );
+			if ( $temp_wrapper->hasChildNodes() ) {
 
-				if ( $temp_wrapper->hasChildNodes() ) {
-
-					foreach ( $temp_wrapper->childNodes as $node ) {
-						$html .= $dom_to_use->saveHTML( $node );
-					}
+				foreach ( $temp_wrapper->childNodes as $node ) {
+					$html .= $dom_to_use->saveHTML( $node );
 				}
 			} else {
 
