@@ -151,24 +151,48 @@ class BSU_Base_Module {
 	 * @since 1.0.0
 	 *
 	 * @param DOMElement $node The DOMElement node object of an HTML tag.
+	 * @param array      $retain_attributes Optional. An array of attribute names that should not be removed.
 	 *
 	 * @return object $node The modified node.
 	 */
-	public function remove_node_attributes( DOMElement $node ) {
+	public function remove_node_attributes( DOMElement $node, array $retain_attributes = array() ) {
 
-		/* Check for HTML attributes. */
+		// Flags whether or not an unnacceptable attribute was found and removed.
+		$attribute_removed = false;
+
+		// Check if the node has any HTML attributes.
 		if ( true === $node->hasAttributes() ) {
 
-			/* Indiscriminately remove all attributes. It ensures the original styling is preserved. */
-			while ( true === $node->hasAttributes() ) {
-				$node->removeAttributeNode( $node->attributes->item( 0 ) );
+			// Loop over every attribute of the node.
+			foreach ( $node->attributes as $attribute ) {
+
+				// Check if the current attribute name is in the list of attributes to retain.
+				if ( false === in_array( $attribute->name, $retain_attributes, true ) ) {
+
+					$attribute_removed = true;
+
+					// Remove the attribute. It was not in the array of attributes to retain.
+					$node->removeAttributeNode( $attribute );
+
+				}
 			}
 
-			$this->error_stacker(
-				'Attributes removed',
-				'The <strong>' . strtoupper( $node->nodeName ) . '</strong> with the text of <strong>' . $node->nodeValue . '</strong> contains HTML attributes (e.g. id, class, style). Attributes cannot be used on this element and are removed when the content is updated.',
-				1
-			);
+			// Add a message indicating that some attributes have not been removed.
+			if ( ! empty( $retain_attributes ) ) {
+				$retained_attributes_mention = ' (Note: The following attribute(s) have been retained: ' . implode( ', ', $retain_attributes ) . '.';
+			} else {
+				$retained_attributes_mention = '';
+			}
+
+			// Add errors to the list if unacceptable attributes were found.
+			if ( true === $attribute_removed ) {
+
+				$this->error_stacker(
+					'Attributes removed',
+					'The <strong>' . strtoupper( $node->nodeName ) . '</strong> with the text of <strong>' . $node->nodeValue . '</strong> contains HTML attributes (e.g. id, class, style). Attributes cannot be used on this element and will removed.' . $retained_attributes_mention,
+					1
+				);
+			}
 		}
 
 		return $node;

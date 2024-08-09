@@ -63,7 +63,9 @@ class BSU_Heading_Inner_HTML extends BSU_Base_Module {
 		$h_tags = $xpath->query( $headings_xpath_query );
 
 		foreach ( $h_tags as $h ) {
+
 			$this->remove_node_inner_html( $h );
+
 		}
 	}
 }
