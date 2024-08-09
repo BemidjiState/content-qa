@@ -62,9 +62,12 @@ class BSU_Heading_Attributes extends BSU_Base_Module {
 		$xpath  = new DOMXPath( $this->dom );
 		$h_tags = $xpath->query( $headings_xpath_query );
 
+		// Set allowed HTML attributes for H tags. For basic HTML, ID seems to be acceptable.
+		$h_allowed_attributes = array( 'id' );
+
 		foreach ( $h_tags as $h ) {
 
-			$this->remove_node_attributes( $h );
+			$this->remove_node_attributes( $h, $h_allowed_attributes );
 
 		}
 	}

@@ -84,6 +84,7 @@ class BSU_Custom_Heading_Punctuation extends BSU_Base_Module {
 
 		// Remove punctuation from the end of the node value.
 		$found_punctuation = preg_match( '/(\p{P})$/', $node->nodeValue, $m );
+
 		if ( ! empty( $found_punctuation ) ) {
 
 			/**

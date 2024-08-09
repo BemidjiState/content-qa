@@ -30,8 +30,8 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 		parent::__construct( $dom, $args );
 
-		$this->remove_all_empty_tags();
 		$this->remove_multiple_spaces();
+		$this->remove_all_empty_tags();
 	}
 
 
@@ -69,6 +69,7 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 			'keygen',
 			'source',
 			'td', // Allow this since some cells may be empty for structure.
+			'i', // Icon tags that are dynamically created.
 		);
 
 		// Create the string of ignored tags for the XPath query.
@@ -78,18 +79,17 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 			$ignored_tags_query .= ' and not(name()="' . $tag . '")';
 		}
 
-		// Get a list of nodes that contain only spaces and do not have child nodes.
+		/**
+		 * Get an array of nodes that contain only spaces and do not have child nodes. Ignored tags
+		 * in the array above are excluded in the query.
+		 */
 		$each_node = $xpath->query( '//*[not(*) and not(text()[normalize-space()])' . $ignored_tags_query . ']' );
 
 		// Loop through the found nodes. Remove all except the ignored tag listed in the array.
 		foreach ( $each_node as $n ) {
 
-			// No length means there are no children.
-			// property_exists( $n, 'length' ) was tried but doesn't seem to do anything and it does cause the condition not to work.
-			if ( is_object( $n ) && 0 >= $n->length ) {
+			$n->parentNode->removeChild( $n );
 
-				$n->parentNode->removeChild( $n );
-			}
 		}
 	}
 
@@ -142,16 +142,23 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 
 			if ( is_object( $n ) && property_exists( $n, 'nodeValue' ) ) {
 
+				// Replace horizontal white space (e.g. tabs, spaces) with a single space.
 				$str = $n->nodeValue;
-				$str = preg_replace( '/\h+/u', ' ', $str );
-              
-              	/**
-                 * Note that if you are doing anything with encoding some issues have been seen with ampersands and greater/less than. Avoid doing
-                 * anything with encoding in Content QA. Instead handle that outside of the class. Something like htmlspecialchars() may provide
-                 * the needed results.
-                 */
-				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+
+				// Replace spaces.
+				$str = preg_replace( '/\h+/', ' ', $str );
+
+				// Convert HTML entities. It will be set to blank unless they are converted.
+				$str = htmlentities( $str );
+
+				/**
+				 * Note that if you are doing anything with encoding some issues have been seen with
+				 * ampersands and greater/less than. Avoid doing anything with encoding in Content
+				 * QA. Instead handle that outside of the class. Something like htmlspecialchars()
+				 * may provide the needed results.
+				 */
 				$n->nodeValue = $str;
+
 			}
 		}
 	}

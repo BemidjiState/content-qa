@@ -40,7 +40,7 @@ class BSU_Content_QA {
 	 *
 	 * @var string
 	 */
-	public $temp_wrapper_id;
+	private $temp_wrapper_id;
 
 	/**
 	 * The heading level to start at.
@@ -141,9 +141,11 @@ class BSU_Content_QA {
 	 */
 	public function __construct( string $html, array $args = array() ) {
 
+		$this->temp_wrapper_id    = $this->set_temp_wrapper_id();
 		$this->mode               = $this->get_mode( $args );
 		$this->modules_discovered = $this->discover_modules();
 
+		// Check if any modules were configured to be disabled.
 		if ( array_key_exists( 'modules_disabled', $args ) && is_array( $args['modules_disabled'] ) ) {
 			$this->modules_disabled = $args['modules_disabled'];
 		}
@@ -198,6 +200,7 @@ class BSU_Content_QA {
 			// Update properties after all modules have run.
 			$this->errors       = $module_output['errors'];
 			$this->errors_count = count( $this->errors );
+
 			if ( array_key_exists( 'dom_modified', $module_output ) ) {
 				$this->dom = $module_output['dom_modified'];
 			}
@@ -211,9 +214,7 @@ class BSU_Content_QA {
 
 
 	/**
-	 * Summary of the function.
-	 *
-	 * Optional expanded description of the function, can include uses or formatting information.
+	 * Processes args passed to the class.
 	 *
 	 * @since 1.0.0
 	 *
@@ -307,7 +308,7 @@ class BSU_Content_QA {
 			 */
 			$encoded_html = mb_encode_numericentity(
 				htmlspecialchars_decode(
-					htmlentities( $html, ENT_NOQUOTES, 'UTF-8', false ),
+					htmlentities( $trimmed_html, ENT_NOQUOTES, 'UTF-8', false ),
 					ENT_NOQUOTES
 				),
 				array(
@@ -318,7 +319,6 @@ class BSU_Content_QA {
 				),
 				'UTF-8'
 			);
-
 		}
 
 		// Avoid returning an empty string.
@@ -327,6 +327,47 @@ class BSU_Content_QA {
 		}
 
 		return $encoded_html;
+	}
+
+
+
+
+
+
+	/**
+	 * Generates a random unique ID to use for this instance of the class. This is used for
+	 * referencing a wrapper that is added by DOMDocument so it can easily be referred to.
+	 *
+	 * @return string $unique_id A random unique ID.
+	 */
+	private function set_temp_wrapper_id() {
+
+		// Check if we need to generate the ID or if one has already been generated.
+		if ( empty( $this->temp_wrapper_id ) ) {
+
+			// Generate a unique ID with a set prefix.
+			$unique_id = uniqid( 'bsu_validator_tmp_wrapper_' );
+
+		}
+
+		return $unique_id;
+	}
+
+
+
+
+
+
+	/**
+	 * Sets the unique id for the temp wrapper.
+	 *
+	 * @return string $unique_id The value of the unique ID set for the wrapper.
+	 */
+	public function get_temp_wrapper_id() {
+
+		$unique_id = $this->temp_wrapper_id;
+
+		return $unique_id;
 	}
 
 
@@ -360,8 +401,7 @@ class BSU_Content_QA {
 		 */
 		$found_wrapper = preg_match( '/(<html>)|(<body>)/', $html );
 		if ( empty( $found_wrapper ) ) {
-			$rand_id = uniqid( 'bsu_validator_tmp_wrapper_' );
-			$html    = '<div id="' . $rand_id . '">' . $html . '</div>';
+			$html = '<div id="' . $this->temp_wrapper_id . '">' . $html . '</div>';
 		}
 
 		// Load the HTML without creating doctype or html/body tags if they are missing.
@@ -370,11 +410,6 @@ class BSU_Content_QA {
 		if ( empty( $html_loaded ) ) {
 			// Something went wrong if we are in here.
 			$dom_object = false;
-		}
-
-		if ( isset( $rand_id ) ) {
-			// Share the temp wrapper id with the new DOMDocument object for later use.
-			$dom_object->temp_wrapper_id = $rand_id;
 		}
 
 		// Get any errors from when the HTML was loaded.
@@ -520,6 +555,9 @@ class BSU_Content_QA {
 	 */
 	protected function run_modules( array $modules, array $args = array() ) {
 
+		// Init shared DOM as null in case no modules are run.
+		$shared_dom = null;
+
 		require_once __DIR__ . '/modules/class-bsu-base-module.php';
 
 		// Init empty arrays to allow for easier merging when no errors are found.
@@ -573,7 +611,7 @@ class BSU_Content_QA {
 
 		/**
 		 * Store the final shared DOM only after all modules have run. It is possible that this is
-		 * never changes. If modifications are made to the DOMDocument then this will be passed on
+		 * never changed. If modifications are made to the DOMDocument then this will be passed on
 		 * to the property.
 		 */
 		$module_reporting['dom_modified'] = $shared_dom;
@@ -638,6 +676,7 @@ class BSU_Content_QA {
 	 */
 	public function get_html( $get_original_dom = false ) {
 
+		// Init the output var to null in case no conditions are met to populate it.
 		$html = null;
 
 		// Check if a flag to get the original, unmodified DOM was passed.
@@ -647,17 +686,16 @@ class BSU_Content_QA {
 			$dom_to_use = $this->dom;
 		}
 
+		// Only do work if a valid DOM object was found.
 		if ( isset( $dom_to_use ) && is_object( $dom_to_use ) ) {
 
-			if ( isset( $dom_to_use->temp_wrapper_id ) ) {
+			// Get the temp wrapper node if it exists.
+			$temp_wrapper = $dom_to_use->getElementById( $this->temp_wrapper_id );
 
-				$temp_wrapper = $dom_to_use->getElementById( $dom_to_use->temp_wrapper_id );
+			if ( $temp_wrapper->hasChildNodes() ) {
 
-				if ( $temp_wrapper->hasChildNodes() ) {
-
-					foreach ( $temp_wrapper->childNodes as $node ) {
-						$html .= $dom_to_use->saveHTML( $node );
-					}
+				foreach ( $temp_wrapper->childNodes as $node ) {
+					$html .= $dom_to_use->saveHTML( $node );
 				}
 			} else {
 
@@ -679,25 +717,25 @@ class BSU_Content_QA {
 
 
 	/**
-	 * Summary of the function.
+	 * Gets a DOM element if it exists.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param bool $get_original_dom Set to TRUE to get original DOM.
 	 *
-	 * @return object $dom_version The DOMDocument object.
+	 * @return object $dom The DOMDocument object.
 	 */
 	public function get_dom( $get_original_dom = false ) {
 
 		if ( true === $get_original_dom && is_object( $this->dom_original ) ) {
-			$dom_version = $this->dom_original;
+			$dom = $this->dom_original;
 		} elseif ( is_object( $this->dom ) ) {
-			$dom_version = $this->dom;
+			$dom = $this->dom;
 		} else {
-			$dom_version = null;
+			$dom = null;
 		}
 
-		return $dom_version;
+		return $dom;
 	}
 
 
@@ -709,15 +747,14 @@ class BSU_Content_QA {
 	/**
 	 * Return the mode that the validator is currently running in.
 	 *
-	 * Optional expanded description of the function, can include uses or formatting information.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @param array $args The args array.
 	 *
 	 * @return string $mode The mode that the class is running in.
 	 */
-	public function get_mode( $args ) {
+	private function get_mode( $args ) {
+
 		if ( array_key_exists( 'only_validate', $args ) && true === $args['only_validate'] ) {
 			$mode = 'only_validate';
 		} elseif ( array_key_exists( 'only_modify', $args ) && true === $args['only_modify'] ) {
