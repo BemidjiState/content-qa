@@ -145,8 +145,8 @@ class BSU_Basic_Cleanup extends BSU_Base_Module {
 				// Replace horizontal white space (e.g. tabs, spaces) with a single space.
 				$str = $n->nodeValue;
 
-				// Replace spaces.
-				$str = preg_replace( '/\h+/', ' ', $str );
+				// Replace spaces. Use the u flag to also catch chars like decoded nbsp;.
+				$str = preg_replace( '/\h+/u', ' ', $str );
 
 				// Convert HTML entities. It will be set to blank unless they are converted.
 				$str = htmlentities( $str );
