@@ -8,7 +8,7 @@ Content QA is modular so you can configure it to use specific checks (e.g. headi
 Add this git repo to you project's `package.json` for NPM or add it as a Git submodule. Below is an example of how you can add it as a dependencie to your `package.json` file for NPM.
 
     "dependencies": {
-        "content-qa": "git+https://[GIT_USERNAME]:[GIT_ACCESS_TOKEN]@bitbucket.bemidjistate.edu/scm/inc/content-qa.git"
+        "content-qa": "git+https://github.com/BemidjiState/Content-QA.git"
     }
 
 Then be sure the `content-qa` directory is moved to a location within your project where it can be included or required with PHP, like in the example below.
