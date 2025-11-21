@@ -5,6 +5,6 @@
 	"description": "Validates and modifies content based on configurable rules/modules.",
 	"repository": {
 		"type": "git",
-		"url": "https://bitbucket.bemidjistate.edu/projects/INC/repos/content-qa/browse"
+		"url": "https://github.com/BemidjiState/Content-QA.git"
 	}
 }
