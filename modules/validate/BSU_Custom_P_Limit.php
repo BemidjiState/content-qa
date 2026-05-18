@@ -14,6 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class BSU_Custom_P_Limit extends BSU_Base_Module {
 
+	/**
+	 * Paragraph limit to check against.
+	 *
+	 * @var int
+	 */
+	protected $limit;
+
 
 
 
