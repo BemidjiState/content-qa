@@ -27,8 +27,6 @@ class BSU_Custom_Heading_Punctuation extends BSU_Base_Module {
 	 */
 	public function __construct( DOMDocument $dom, $args ) {
 
-		global $bsu_theme_settings;
-
 		parent::__construct( $dom, $args );
 
 		// Create an array of valid HTML headings.
@@ -50,7 +48,7 @@ class BSU_Custom_Heading_Punctuation extends BSU_Base_Module {
 				// This conditional is custom for BSU. It ignores the first heading tag.
 				if ( empty( $after_first_heading ) &&
 					$html_headings_range[ $args['headings_start'] ] === $h->tagName &&
-					in_array( $page_template_filename, $bsu_theme_settings->front_page_templates ) ) {
+					in_array( $page_template_filename, BSU::settings()->front_page_templates ?? array() ) ) {
 
 					continue;
 
