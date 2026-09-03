@@ -1,0 +1,43 @@
+name: 'Release: Build, Tag & Publish'
+
+# =============================================================================
+# Release pipeline for the content-qa package, delegated to the shared
+# release-zip-and-mirror workflow in BemidjiState/.github:
+#
+#   push to release → X.Y.Z-rc prerelease here
+#   push to main    → stable X.Y.Z here, mirrored to bsuwp-release-assets
+#                     as content-qa@X.Y.Z for consumers who may read
+#                     releases but not the source.
+#
+# The zip's single top-level folder is content-qa/, so the BSUwp theme's
+# fetch step unzips it straight into artifacts/content-qa/.
+# =============================================================================
+
+on:
+  push:
+    branches:
+      - main
+      - release
+  # Re-cut the current branch's release by hand.
+  workflow_dispatch:
+
+concurrency:
+  group: '${{ github.ref }}-${{ github.workflow }}'
+  cancel-in-progress: true
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      actions: read
+      packages: read # flows into the shared workflow so npm ci can read @bemidjistate/* packages
+    uses: BemidjiState/.github/.github/workflows/release-zip-and-mirror.yml@1.3.0
+    with:
+      package: 'content-qa'
+      zip_source: 'dist/content-qa'
+      build_command: 'npm run build'
+      npm_install: false # the build is a pure src/ copy with no dependencies
+      mirror_repo: 'bsuwp-release-assets'
+    secrets:
+      auth_app_id: ${{ vars.ORG__BSU_RELEASE_BOT_APP_ID }}
+      auth_app_key: ${{ secrets.ORG__BSU_RELEASE_BOT_PRIV_KEY }}
