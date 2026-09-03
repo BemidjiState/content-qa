@@ -1,10 +1,27 @@
 {
 	"name": "content-qa",
-	"version": "1.1.7",
-	"author": "BSU Web Services",
+	"private": true,
 	"description": "Validates and modifies content based on configurable rules/modules.",
+	"author": "BSU|NTC Web Services",
+	"license": "Copyright Web Services, Bemidji State University - All Rights Reserved. Unauthorized copying of any files or code in this package, via any medium is strictly prohibited.",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/BemidjiState/Content-QA.git"
+		"url": "git+https://github.com/BemidjiState/content-qa.git"
+	},
+	"homepage": "https://www.bemidjistate.edu",
+	"engines": {
+		"node": ">=24.18",
+		"npm": ">=11.6"
+	},
+	"packageManager": "npm@11.16.0",
+	"scripts": {
+		"build": "node scripts/build.js",
+		"lint:php": "node_modules/@bsu/wp-coding-standards/vendor/bin/phpcs --standard=phpcs.xml --parallel=4 .",
+		"fix:php": "node_modules/@bsu/wp-coding-standards/vendor/bin/phpcbf --standard=phpcs.xml --parallel=4 .",
+		"test": "npm run -s build"
+	},
+	"devDependencies": {
+		"@bsu/BSUPhpLint": "npm:@bemidjistate/bsuphplint@2.0.3",
+		"@bsu/wp-coding-standards": "npm:@bemidjistate/wp-coding-standards@3.5.0"
 	}
 }

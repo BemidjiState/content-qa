@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="ContentQa">
+
+	<description>
+		Coding standard for the content-qa package. Inherits BSUPhpLint in full.
+	</description>
+
+	<!-- Lint PHP only; show progress and sniff codes so exclusions are easy to target. -->
+	<arg name="extensions" value="php"/>
+	<arg value="ps"/>
+
+	<file>.</file>
+
+	<!-- Never lint dependencies or build output. -->
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/dist/*</exclude-pattern>
+
+	<rule ref="BSUPhpLint"/>
+
+</ruleset>

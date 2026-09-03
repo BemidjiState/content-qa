@@ -1,0 +1,56 @@
+name: "CI: Pull Request Validation"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - release
+    types:
+      - opened
+      - edited
+      - synchronize  # For new commits on the PR branch.
+      - reopened
+
+concurrency:
+  group: "${{ github.ref }}-${{ github.workflow }}"
+  cancel-in-progress: false  # This needs to run on all PRs.
+
+jobs:
+
+  validate-pr-title:
+    # Do NOT validate on the default branch. Versioning is done on
+    # the release branch.
+    if: github.base_ref != github.event.repository.default_branch
+    name: Validate PR Title
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+
+    steps:
+      # Enforce Conventional Commits (for Semantic Versioning) for the PR title.
+      - name: Check PR Title against Conventional Commit spec
+        uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-package:
+    name: Build the package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+
+    steps:
+
+      - name: Checkout source
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Build the package
+        run: npm run build
