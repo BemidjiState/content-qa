@@ -2,3 +2,5 @@
 *.sublime-workspace
 .hq.*
 .DS_Store
+node_modules
+dist
